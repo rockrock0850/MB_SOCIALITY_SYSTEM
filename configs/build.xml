@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="st" name="MB_Sociality">
+    <property environment="env"/>
+    <property name="project.home" value="../../src/"/>
+    <property name="junit.output.dir" value="junit"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+    
+    <path id="Web App Libraries.libraryclasspath">
+        <pathelement location="${project.home}WebContent/WEB-INF/lib/*.jar"/>
+    </path>
+    <path id="EAR Libraries.libraryclasspath"/>
+    <path id="MB_Sociality.classpath">
+        <pathelement location="build/classes"/>
+        <path refid="Web App Libraries.libraryclasspath"/>
+        <path refid="EAR Libraries.libraryclasspath"/>
+    </path>
+    
+    <target name="clean">
+        <delete dir="${project.home}wars"/>
+        <delete dir="${project.home}WebContent/WEB-INF/classes"/>
+    </target>
+    
+    <target depends="clean" name="compile">
+        <mkdir dir="${project.home}build/classes" />
+        <javac debug="true" debuglevel="${debuglevel}" destdir="${project.home}build/classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="${project.home}src"/>
+            <src path="${project.home}properties"/>
+            <src path="${project.home}configs"/>
+            <classpath refid="MB_Sociality.classpath"/>
+        </javac>
+    </target>
+    
+    <target depends="compile" name="st">
+		<mkdir dir="${project.home}WebContent/WEB-INF/classes" />
+		<copy includeemptydirs="false" todir="${project.home}WebContent/WEB-INF/classes">
+		    <fileset dir="${project.home}build/classes">
+				<include name="**/*.*"/>
+			</fileset>
+			<globmapper from="*-st.properties" to="*.properties"/>
+		</copy>
+		<copy includeemptydirs="false" todir="${project.home}WebContent/WEB-INF/classes">
+		    <fileset dir="${project.home}build/classes">
+				<include name="**/*.*"/>
+			</fileset>
+		</copy>
+		<copy includeemptydirs="false" todir="${project.home}WebContent/WEB-INF/classes">
+			<fileset dir="${project.home}src">
+				<include name="**/*.*"/>
+			</fileset>
+		</copy>
+		
+<!-- 包war		 -->
+		
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <jar destfile="${ant.project.name}.war">
+		    <zipfileset dir="${project.home}WebContent/">
+		        <include name="**/*.*" />
+		        <exclude name="**/*.war" />
+		    </zipfileset>
+		</jar>
+		<move file="${ant.project.name}.war" todir="${basedir}" />
+    	<delete dir="${project.home}WebContent/WEB-INF/classes"/>
+    </target>
+</project>
